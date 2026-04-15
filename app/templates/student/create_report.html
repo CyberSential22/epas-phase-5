@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+
+{% block title %}Create Event Report - EventFlow{% endblock %}
+
+{% block content %}
+<div class="mb-6">
+    <h1 class="h2">Submit New Event Report</h1>
+    <p class="text-muted">Fill out the multi-section form below to submit your event for institutional approval.</p>
+</div>
+
+<form action="#" method="POST" class="needs-validation">
+    <!-- Section 1: Basic Event Details -->
+    <div class="card mb-6">
+        <div class="card-header bg-light">
+            <h3 class="mb-0">Section 1: Basic Information</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12 mb-4">
+                    <label for="title">Event Title <span class="text-danger">*</span></label>
+                    <input type="text" id="title" class="form-control" placeholder="Enter clear event name" required>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <label for="event_type">Event Type</label>
+                    <select id="event_type" class="form-control">
+                        <option>Workshop / Seminar</option>
+                        <option>Cultural Event</option>
+                        <option>Sports Tournament</option>
+                        <option>Hackathon</option>
+                    </select>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <label for="venue">Proposed Venue</label>
+                    <input type="text" id="venue" class="form-control" placeholder="e.g. Auditorium, Hall A">
+                </div>
+                <div class="col-md-6 mb-4">
+                    <label for="date">Event Date</label>
+                    <input type="date" id="date" class="form-control">
+                </div>
+                <div class="col-md-3 mb-4">
+                    <label for="start">Start Time</label>
+                    <input type="time" id="start" class="form-control">
+                </div>
+                <div class="col-md-3 mb-4">
+                    <label for="end">End Time</label>
+                    <input type="time" id="end" class="form-control">
+                </div>
+                <div class="col-12">
+                    <label for="desc">Event Description</label>
+                    <textarea id="desc" class="form-control" rows="4"
+                        placeholder="Briefly describe the purpose and activities"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 2: Audience & Participants -->
+    <div class="card mb-6">
+        <div class="card-header bg-light">
+            <h3 class="mb-0">Section 2: Audience & Participants</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <label for="target">Target Audience</label>
+                    <select id="target" class="form-control">
+                        <option>Internal Students</option>
+                        <option>Staff & Faculty</option>
+                        <option>Open to Public</option>
+                    </select>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <label for="size">Estimated Turnout</label>
+                    <input type="number" id="size" class="form-control" placeholder="e.g. 100">
+                </div>
+                <div class="col-12">
+                    <div class="flex items-center gap-2">
+                        <input type="checkbox" id="external" style="width: 20px; height: 20px;">
+                        <label for="external" class="mb-0">External Guests / Speakers Invited?</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 3: Budget Requirements -->
+    <div class="card mb-6">
+        <div class="card-header bg-light">
+            <h3 class="mb-0">Section 3: Budget & Resources</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <label for="budget">Total Estimated Budget (₹)</label>
+                    <div class="flex items-center gap-2">
+                        <span class="fw-bold">₹</span>
+                        <input type="number" id="budget" class="form-control" placeholder="0.00">
+                    </div>
+                </div>
+                <div class="col-12 mb-4">
+                    <label for="breakdown">Budget Breakdown</label>
+                    <textarea id="breakdown" class="form-control" rows="3"
+                        placeholder="List key expenses (Food, Decor, etc.)"></textarea>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="flex items-center gap-2">
+                        <input type="checkbox" id="projector" style="width: 18px; height: 18px;">
+                        <label for="projector" class="mb-0">Audio/Visual (Projector)</label>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="flex items-center gap-2">
+                        <input type="checkbox" id="mic" style="width: 18px; height: 18px;">
+                        <label for="mic" class="mb-0">Sound System (Mics)</label>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="flex items-center gap-2">
+                        <input type="checkbox" id="security" style="width: 18px; height: 18px;">
+                        <label for="security" class="mb-0">Security Required</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex gap-4 mb-8">
+        <button type="submit" class="btn btn-primary px-8">Submit for Review</button>
+        <button type="button" class="btn btn-light">Save Draft</button>
+        <a href="{{ url_for('events.student_dashboard') }}" class="btn btn-outline-danger">Cancel</a>
+    </div>
+</form>
+{% endblock %}

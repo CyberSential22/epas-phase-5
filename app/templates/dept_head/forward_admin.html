@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Forward to Admin - Dept Head{% endblock %}
+
+{% block content %}
+<div class="mb-6">
+    <h1 class="h2">Forward Exceptional Cases to Admin</h1>
+    <p class="text-muted">Use this interface for events requiring super-user intervention or high-level institutional
+        policy exceptions.</p>
+</div>
+
+<div class="card bg-info-light border-info">
+    <div class="card-body">
+        <h3 class="text-info"><i class="bi bi-info-circle mr-2"></i> Exceptional Handling</h3>
+        <p>Forwarding an event to the System Admin bypasses certain departmental validation rules but requires precise
+            justification.</p>
+
+        <div class="table-container mt-4 bg-white">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Event</th>
+                        <th>Organizer</th>
+                        <th>Exception Reason</th>
+                        <th class="text-center">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Inter-University Debate</td>
+                        <td>James Bond</td>
+                        <td>Cross-departmental resources required</td>
+                        <td class="text-center">
+                            <button class="btn btn-info btn-sm text-white">Forward to Admin</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

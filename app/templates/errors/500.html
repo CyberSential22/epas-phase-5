@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}500 - Internal Server Error{% endblock %}
+
+{% block content %}
+<div style="text-align: center; padding: 5rem 0;">
+    <h1 style="font-size: 4rem; color: #ef4444;">500</h1>
+    <h2>System Error</h2>
+    <p>An unexpected error occurred. Our administrators have been notified.</p>
+    <a href="{{ url_for('main.index') }}" class="btn">Back to Home</a>
+</div>
+{% endblock %}

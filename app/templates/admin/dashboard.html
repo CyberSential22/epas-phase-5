@@ -1,0 +1,192 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-0 text-gray-800">System Administration</h1>
+            <p class="text-muted">Platform-wide oversight, user management, and audit tracking.</p>
+        </div>
+        <div class="badge bg-dark p-2 rounded-pill">
+            <i class="fas fa-user-shield me-2"></i> Admin Control
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row mb-4">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Users</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ user_count }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-users fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Total Events</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ event_count }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Pending Review</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ pending_count }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Total Budget (Est)</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800 text-truncate">{{ total_budget |
+                                format_inr }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-rupee-sign fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Main Content -->
+        <div class="col-lg-8">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex justify-content-between align-items-center bg-white">
+                    <h6 class="m-0 font-weight-bold text-primary">Recent Events</h6>
+                    <a href="{{ url_for('admin.all_events') }}" class="btn btn-sm btn-link">View All</a>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th>Event</th>
+                                    <th>Organizer</th>
+                                    <th>Status</th>
+                                    <th>Budget</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for event in recent_events %}
+                                <tr>
+                                    <td>
+                                        <div class="fw-bold">{{ event.title }}</div>
+                                        <div class="small text-muted">ID: {{ event.reference_id }}</div>
+                                    </td>
+                                    <td>{{ event.creator.username }}</td>
+                                    <td>
+                                        {% from "shared/event_status_badge.html" import status_badge %}
+                                        {{ status_badge(event.status) }}
+                                    </td>
+                                    <td>{{ event.budget | format_inr }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex justify-content-between align-items-center bg-white">
+                    <h6 class="m-0 font-weight-bold text-primary">Recent Audit Logs</h6>
+                    <a href="{{ url_for('admin.audit_logs') }}" class="btn btn-sm btn-link">Full Records</a>
+                </div>
+                <div class="card-body p-0">
+                    <div class="list-group list-group-flush">
+                        {% for log in recent_logs %}
+                        <div class="list-group-item">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h6 class="mb-1 text-primary">{{ log.action_type }}</h6>
+                                <small class="text-muted">{{ log.timestamp.strftime('%H:%M') }}</small>
+                            </div>
+                            <p class="mb-1 small">{{ log.details }}</p>
+                            <small class="text-muted">by {{ log.user.username if log.user else 'System' }}</small>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar Actions -->
+        <div class="col-lg-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 bg-white">
+                    <h6 class="m-0 font-weight-bold text-primary">Quick Controls</h6>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="{{ url_for('admin.audit_logs') }}" class="btn btn-light border text-start">
+                            <i class="fas fa-history me-2 text-info"></i> View Audit Logs
+                        </a>
+                        <a href="{{ url_for('admin.list_users') }}" class="btn btn-light border text-start">
+                            <i class="fas fa-users-cog me-2 text-primary"></i> Manage Users
+                        </a>
+                        <a href="{{ url_for('admin.export_reports') }}" class="btn btn-light border text-start">
+                            <i class="fas fa-file-export me-2 text-success"></i> Export System Report
+                        </a>
+                        <hr>
+                        <a href="{{ url_for('admin.system_settings') }}" class="btn btn-outline-danger">
+                            <i class="fas fa-server me-2"></i> System Settings
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 bg-white">
+                    <h6 class="m-0 font-weight-bold text-primary">Platform Health</h6>
+                </div>
+                <div class="card-body text-center">
+                    <div class="display-4 text-success mb-2">99.9%</div>
+                    <div class="small fw-bold text-uppercase text-muted mb-3">System Uptime</div>
+                    <div class="progress mb-4" style="height: 10px;">
+                        <div class="progress-bar bg-success" role="progressbar" style="width: 99.9%"></div>
+                    </div>
+                    <div class="text-start small">
+                        <div class="mb-1"><i class="fas fa-circle text-success me-1" style="font-size: 8px;"></i>
+                            Database: Online</div>
+                        <div class="mb-1"><i class="fas fa-circle text-success me-1" style="font-size: 8px;"></i> Mail
+                            Server: Online</div>
+                        <div class="mb-1"><i class="fas fa-circle text-success me-1" style="font-size: 8px;"></i> Auth
+                            Service: Online</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

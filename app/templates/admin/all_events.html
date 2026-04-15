@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}Master Event Log - Admin{% endblock %}
+
+{% block content %}
+<div class="mb-6">
+    <h1 class="h2">Master Event Records</h1>
+    <p class="text-muted">Global view of every event proposal across all departments and stages.</p>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-header bg-white">
+        <div class="flex justify-between items-center">
+            <div class="flex gap-4 items-center">
+                <span class="small fw-bold">Filter By:</span>
+                <select class="status-select-themed">
+                    <option>Any Status</option>
+                    <option>Approved</option>
+                    <option>Pending</option>
+                </select>
+                <select class="status-select-themed">
+                    <option>Any Department</option>
+                    <option>Engineering</option>
+                    <option>Arts</option>
+                </select>
+            </div>
+            <button class="btn btn-sm btn-outline-primary">Apply Filters</button>
+        </div>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Ref</th>
+                        <th>Event</th>
+                        <th>Organizer</th>
+                        <th>Dept</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for event in pagination.items %}
+                    <tr>
+                        <td class="small fw-bold">{{ event.reference_id }}</td>
+                        <td>
+                            <div class="fw-bold">{{ event.title }}</div>
+                            <div class="small text-muted">{{ event.event_type }}</div>
+                        </td>
+                        <td>{{ event.creator.username if event.creator else 'System' }}</td>
+                        <td>{{ event.creator.department if event.creator and event.creator.department else 'N/A' }}</td>
+                        <td>
+                            {% from "shared/event_status_badge.html" import status_badge %}
+                            {{ status_badge(event.status) }}
+                        </td>
+                        <td>
+                            <a href="{{ url_for('events.confirmation', event_id=event.id) }}"
+                                class="btn btn-sm btn-light">View Details</a>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6" class="text-center p-5 text-muted">No event records found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card-footer bg-white">
+        {% include "shared/pagination.html" %}
+    </div>
+</div>
+{% endblock %}

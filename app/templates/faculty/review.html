@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% from "shared/event_status_badge.html" import status_badge %}
+
+{% block title %}Review Event: {{ event.reference_id }}{% endblock %}
+
+{% block content %}
+<nav class="mb-4">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('faculty.dashboard') }}">Dashboard</a></li>
+        <li class="breadcrumb-item active">Review Event</li>
+    </ol>
+</nav>
+
+<div class="row">
+    <div class="col-lg-8">
+        <!-- Event Details Card -->
+        <div class="card mb-6">
+            <div class="card-header">
+                <h3 class="mb-0 text-primary">#{{ event.reference_id }}: {{ event.title }}</h3>
+                <span class="badge badge-info">{{ event.status.value }}</span>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <label class="text-muted small">Event Type</label>
+                        <div class="fw-bold">{{ event.event_type }}</div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <label class="text-muted small">Venue</label>
+                        <div class="fw-bold">{{ event.venue }}</div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <label class="text-muted small">Date</label>
+                        <div class="fw-bold">{{ event.event_date.strftime('%B %d, %Y') }}</div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <label class="text-muted small">Timing</label>
+                        <div class="fw-bold">
+                            {{ event.start_time.strftime('%I:%M %p') }} - {{ event.end_time.strftime('%I:%M %p') }}
+                        </div>
+                    </div>
+                    <div class="col-12 mb-4">
+                        <label class="text-muted small">Description</label>
+                        <p class="mb-0">{{ event.description }}</p>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <label class="text-muted small">Target Audience</label>
+                        <div>{{ event.audience_type }} (Approx. {{ event.audience_size }})</div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <label class="text-muted small">Budget Requested</label>
+                        <div class="text-success fw-bold">{{ event.budget | format_inr }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Technical Requirements -->
+        <div class="card mb-6">
+            <div class="card-header">
+                <h3 class="mb-0">Technical & Security</h3>
+            </div>
+            <div class="card-body">
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="flex items-center gap-2">
+                        <i
+                            class="bi {{ 'bi-check-circle-fill text-success' if event.requires_projector else 'bi-dash-circle text-muted' }}"></i>
+                        <span>Projector</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i
+                            class="bi {{ 'bi-check-circle-fill text-success' if event.requires_microphone else 'bi-dash-circle text-muted' }}"></i>
+                        <span>Microphone</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i
+                            class="bi {{ 'bi-check-circle-fill text-success' if event.requires_security else 'bi-dash-circle text-muted' }}"></i>
+                        <span>Security</span>
+                    </div>
+                </div>
+                {% if event.technical_requirements %}
+                <div class="mt-4">
+                    <label class="text-muted small">Additional Requirements</label>
+                    <div class="p-6 bg-light border rounded">
+                        {{ event.technical_requirements }}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <!-- Decision Form -->
+        {% set action_url = url_for('faculty.decide', event_id=event.id) %}
+        {% set back_url = url_for('faculty.dashboard') %}
+        {% include 'shared/review_form.html' %}
+
+        <!-- Requester Info -->
+        <div class="card">
+            <div class="card-body">
+                <h3 class="mb-4">Submitted By</h3>
+                <div class="flex items-center gap-4">
+                    <div class="badge badge-primary"
+                        style="width: 48px; height: 48px; font-size: 1.25rem; justify-content: center;">
+                        {{ event.creator.username[0]|upper }}
+                    </div>
+                    <div>
+                        <div class="fw-bold">{{ event.creator.username }}</div>
+                        <div class="small text-muted">{{ event.creator.email }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

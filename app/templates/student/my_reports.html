@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}My Events - EventFlow{% endblock %}
+
+{% block content %}
+<div class="mb-6 flex justify-between items-center">
+    <div>
+        <h1 class="h2">My Event Reports</h1>
+        <p class="text-muted">History and status of all your submitted event proposals.</p>
+    </div>
+    <a href="{{ url_for('events.create') }}" class="btn btn-primary">
+        <i class="bi bi-plus-lg mr-2"></i> Submit New Event
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <div class="flex items-center gap-4">
+            <select class="status-select-themed" id="filterStatus">
+                <option value="All">All Statuses</option>
+                <option value="Draft">Draft</option>
+                <option value="Pending">Pending</option>
+                <option value="Approved">Approved</option>
+                <option value="Rejected">Rejected</option>
+            </select>
+            <div class="form-text">Filter your reports by current status.</div>
+        </div>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Reference ID</th>
+                        <th>Event Title</th>
+                        <th>Submission Date</th>
+                        <th>Status</th>
+                        <th class="text-center">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in range(5) %}
+                    <tr>
+                        <td class="fw-bold">EVT-2026-00{{ i+1 }}</td>
+                        <td>
+                            <div class="fw-medium">Corporate Tech Workshop {{ i+1 }}</div>
+                            <div class="small text-muted">Auditorium A</div>
+                        </td>
+                        <td>Mar 1{{ i }}, 2026</td>
+                        <td>
+                            {% if i % 4 == 0 %}
+                            <span class="badge badge-success">Approved</span>
+                            {% elif i % 4 == 1 %}
+                            <span class="badge badge-warning">Pending Faculty</span>
+                            {% elif i % 4 == 2 %}
+                            <span class="badge badge-info">Pending Dept Head</span>
+                            {% else %}
+                            <span class="badge badge-danger">Rejected</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-center">
+                            <div class="btn-group">
+                                <a href="#" class="btn btn-sm btn-light" title="View"><i class="bi bi-eye"></i></a>
+                                <a href="#" class="btn btn-sm btn-light" title="Edit"><i class="bi bi-pencil"></i></a>
+                                <a href="{{ url_for('events.track_status') }}" class="btn btn-sm btn-light"
+                                    title="Track"><i class="bi bi-activity"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
